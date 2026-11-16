@@ -1,6 +1,13 @@
+import hashlib
+
 import streamlit as st
 from pawpal_system import Owner, Pet, Scheduler, Task
-from datetime import datetime
+from ai_parser import (
+    AIParserError, Clarification, backend_label, parse_and_validate,
+)
+from ai_parser import next_pet_id as _next_pet_id, next_task_id as _next_task_id
+from transcribe import TranscribeError, transcribe
+from datetime import date, datetime
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -46,6 +53,142 @@ At minimum, your system should:
 st.divider()
 
 
+def next_task_id() -> int:
+    """An id no existing task uses (count + 1 can collide once recurring tasks are added)."""
+    return _next_task_id(owner)
+
+
+def next_pet_id() -> int:
+    """An id no existing pet uses."""
+    return _next_pet_id(owner)
+
+
+def show_table(rows: list) -> None:
+    """Show a list of dicts as a markdown table.
+
+    Used instead of st.table, which needs pandas and pyarrow; Windows
+    Application Control can block pyarrow's DLLs and crash the page.
+    """
+    if not rows:
+        return
+    headers = list(rows[0])
+
+    def cell(value) -> str:
+        return str(value).replace("|", "\\|").replace("\n", " ")
+
+    lines = [
+        "| " + " | ".join(headers) + " |",
+        "| " + " | ".join("---" for _ in headers) + " |",
+    ]
+    lines += ["| " + " | ".join(cell(row[h]) for h in headers) + " |" for row in rows]
+    st.markdown("\n".join(lines))
+
+
+# ---------------------------------------------------------------- Quick add
+# Say or type a request. Nothing changes until the user clicks Confirm.
+st.subheader("🎙️ Quick add")
+st.caption(
+    "Record or type a request, like \"walk Mochi every day at 8am for 30 minutes\", "
+    "\"add a cat named Luna\" or \"remove Max\". Check the text, click Parse, "
+    "then confirm the preview."
+)
+st.caption(f"AI model in use: {backend_label()}")
+
+for kind, message in st.session_state.pop("quick_msgs", []):
+    getattr(st, kind)(message)
+
+if st.session_state.pop("quick_clear", False):
+    st.session_state.quick_text = ""  # must happen before the text box is created
+nonce = st.session_state.setdefault("quick_nonce", 0)
+
+audio = st.audio_input("Record a request", key=f"quick_audio_{nonce}")
+if audio is not None:
+    audio_bytes = audio.getvalue()
+    audio_id = hashlib.md5(audio_bytes).hexdigest()
+    if st.session_state.get("quick_audio_seen") != audio_id:  # reruns must not re-transcribe
+        st.session_state.quick_audio_seen = audio_id
+        try:
+            with st.spinner("Transcribing (the first time downloads the speech model)..."):
+                st.session_state.quick_text = transcribe(audio_bytes, [p.name for p in owner.pets])
+        except TranscribeError as error:
+            st.error(str(error))
+
+quick_text = st.text_area("Or type a request (you can edit the transcript here)", key="quick_text")
+
+if st.button("Parse"):
+    st.session_state.quick_pending = None
+    st.session_state.quick_question = None
+    st.session_state.quick_corrections = []
+    try:
+        with st.spinner("Understanding your request..."):
+            # The model proposes; the code checks it against your pets and, if the
+            # check fails, sends the error back so the model can fix its own answer.
+            agent = parse_and_validate(quick_text, owner, date.today())
+        st.session_state.quick_corrections = agent.corrections
+        if isinstance(agent.outcome, Clarification):
+            st.session_state.quick_question = agent.outcome.question
+        else:
+            st.session_state.quick_pending = agent.outcome
+    except AIParserError as error:
+        st.error(str(error))
+
+if st.session_state.get("quick_question"):
+    st.info(f"{st.session_state.quick_question}  (Add your answer to the text above and click Parse again.)")
+
+for note in st.session_state.get("quick_corrections", []):
+    st.caption(f"🔁 The AI corrected itself after: {note}")
+
+pending = st.session_state.get("quick_pending")
+if pending:
+    action = pending[0]
+    st.markdown("**Here's what I understood:**")
+    if action == "task":
+        _, pet, task = pending
+        st.info(
+            f"Add task for **{pet.name}**: {task.description}, {task.frequency}, "
+            f"{task.due_time:%b %d, %I:%M %p}, {task.duration_minutes} min, {task.priority} priority"
+        )
+    elif action == "add_pet":
+        new_pet = pending[1]
+        details = [new_pet.species] + ([new_pet.breed] if new_pet.breed else []) + (
+            [f"age {new_pet.age}"] if new_pet.age else []
+        )
+        st.info(f"Add pet **{new_pet.name}** ({', '.join(details)})")
+    else:
+        _, pet, task_count = pending
+        st.warning(f"Remove **{pet.name}**? This also removes its {task_count} task(s) and cannot be undone.")
+
+    confirm_col, cancel_col = st.columns(2)
+    confirmed = confirm_col.button("Confirm", type="primary")
+    cancelled = cancel_col.button("Cancel")
+    if confirmed or cancelled:
+        messages = []
+        if confirmed:
+            if action == "task":
+                try:
+                    warnings = Scheduler(owner).add_task(pet, task)
+                    messages.append(("success", f"Added {task.description} for {pet.name}"))
+                    messages += [("warning", w) for w in warnings]
+                except ValueError as error:
+                    messages.append(("error", f"Task not added: {error}"))
+            elif action == "add_pet":
+                owner.add_pet(new_pet)
+                messages.append(("success", f"Added pet {new_pet.name}"))
+            else:
+                owner.remove_pet(pet)
+                messages.append(("success", f"Removed {pet.name} and its {task_count} task(s)"))
+        else:
+            messages.append(("info", "Cancelled. Nothing was changed."))
+        st.session_state.quick_msgs = messages
+        st.session_state.quick_pending = None
+        st.session_state.quick_question = None
+        st.session_state.quick_clear = True
+        st.session_state.quick_nonce = nonce + 1  # new key resets the recorder
+        st.rerun()
+
+st.divider()
+
+
 st.subheader("Basic Information")
 owner_name = st.text_input("Owner name", value="Jordan")
 owner.name = owner_name
@@ -55,7 +198,7 @@ owner.name = owner_name
 pet_name = st.text_input("Pet name", value="Mochi")
 species = st.selectbox("Species", ["dog", "cat", "other"])
 if st.button("Add pet"):
-    pet = Pet(len(owner.pets) + 1, pet_name, species)
+    pet = Pet(next_pet_id(), pet_name, species)
     owner.add_pet(pet)
 
 st.markdown("### Tasks")
@@ -93,10 +236,11 @@ else:
         frequency = st.selectbox("Frequency", ["once", "daily", "weekly"])
 
 
-if st.button("Add task"):
+    # Inside the else: pet_choice and the form fields only exist when there is a pet.
+    if st.button("Add task"):
         due = datetime.combine(task_date, task_time)
         task = Task(
-            len(owner.get_all_tasks()) + 1,
+            next_task_id(),
             task_title,
             "general",
             due,
@@ -175,7 +319,7 @@ if owner.get_all_tasks():
     sorted_tasks = [t for t in sorted_tasks if any(t is w for w in wanted)]
 
     if sorted_tasks:
-        st.table(
+        show_table(
             [
                 {
                     "Date": f"{t.due_time:%b %d}",
@@ -205,7 +349,7 @@ if st.button("Generate schedule"):
     todays_tasks = scheduler.get_daily_schedule(schedule_day)
     if todays_tasks:
         st.success(f"{len(todays_tasks)} task(s) scheduled for {schedule_day:%B %d, %Y}")
-        st.table(
+        show_table(
             [
                 {
                     "Time": f"{t.due_time:%I:%M %p}",

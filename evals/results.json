@@ -1,0 +1,916 @@
+{
+  "meta": {
+    "model": "local model (qwen2.5:7b-instruct, via Ollama)",
+    "when": "2026-11-15 19:32",
+    "split": "dev",
+    "cases": 21,
+    "today": "2026-11-14",
+    "pets": "Mochi, Max"
+  },
+  "runs": {
+    "loop off": [
+      {
+        "id": "t01",
+        "text": "starting tomorrow, walk Mochi every day at 8am for 30 minutes, high priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T08:00",
+            "duration": 30,
+            "priority": "high",
+            "frequency": "daily"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-16T08:00",
+          "duration": 30,
+          "priority": "high",
+          "frequency": "daily"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 6.46
+      },
+      {
+        "id": "t02",
+        "text": "feed Max tomorrow at 7:30am for 10 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-15T07:30",
+            "duration": 10
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-16T07:30",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.65
+      },
+      {
+        "id": "t03",
+        "text": "Mochi has a vet appointment on Friday at 2pm for 60 minutes, high priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-20T14:00",
+            "duration": 60,
+            "priority": "high"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-20T14:00",
+          "duration": 60,
+          "priority": "high",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.72
+      },
+      {
+        "id": "t04",
+        "text": "give Max his medicine every week on Monday at 6pm for 5 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-16T18:00",
+            "duration": 5,
+            "frequency": "weekly"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-16T18:00",
+          "duration": 5,
+          "priority": "medium",
+          "frequency": "weekly"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.72
+      },
+      {
+        "id": "t05",
+        "text": "groom Mochi on Wednesday at 10am for 45 minutes, low priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-18T10:00",
+            "duration": 45,
+            "priority": "low"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-17T10:00",
+          "duration": 45,
+          "priority": "low",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.69
+      },
+      {
+        "id": "t06",
+        "text": "play with Max tonight at 7pm for 20 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-14T19:00",
+            "duration": 20
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-19T19:00",
+          "duration": 20,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.7
+      },
+      {
+        "id": "t07",
+        "text": "uh walk mochi tomorrow at eight in the morning for like thirty minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T08:00",
+            "duration": 30
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-16T08:00",
+          "duration": 30,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.73
+      },
+      {
+        "id": "t08",
+        "text": "Max needs his nails trimmed Thursday at 4pm for 15 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-19T16:00",
+            "duration": 15
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-19T16:00",
+          "duration": 15,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.73
+      },
+      {
+        "id": "p01",
+        "text": "add a cat named Luna",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Luna",
+            "species": "cat"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "add_pet",
+          "name": "Luna",
+          "species": "cat"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.52
+      },
+      {
+        "id": "p02",
+        "text": "I got a new dog, his name is Biscuit",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Biscuit",
+            "species": "dog"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "question",
+          "text": "What is the new pet's name?"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.66
+      },
+      {
+        "id": "p03",
+        "text": "add a rabbit named Clover",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Clover",
+            "species": "other"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "add_pet",
+          "name": "Clover",
+          "species": "other"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.76
+      },
+      {
+        "id": "p04",
+        "text": "add a pet named Pixel",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "add_pet",
+          "name": "Pixel",
+          "species": "other"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.71
+      },
+      {
+        "id": "r01",
+        "text": "remove Max",
+        "expect": [
+          {
+            "kind": "remove_pet",
+            "pet": "Max"
+          }
+        ],
+        "expected_kind": "remove_pet",
+        "got": {
+          "kind": "remove_pet",
+          "pet": "Max"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.74
+      },
+      {
+        "id": "r02",
+        "text": "delete Mochi from my pets",
+        "expect": [
+          {
+            "kind": "remove_pet",
+            "pet": "Mochi"
+          }
+        ],
+        "expected_kind": "remove_pet",
+        "got": {
+          "kind": "remove_pet",
+          "pet": "Mochi"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.78
+      },
+      {
+        "id": "r03",
+        "text": "remove my pet",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "Which pet should I remove?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.66
+      },
+      {
+        "id": "q01",
+        "text": "vet appointment tomorrow at 9",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "How long should it take, in minutes?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.13
+      },
+      {
+        "id": "q02",
+        "text": "walk Mochi for 30 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T09:00",
+          "duration": 30,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.11
+      },
+      {
+        "id": "q03",
+        "text": "feed tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T07:00",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.12
+      },
+      {
+        "id": "e01",
+        "text": "add a dog named Mochi",
+        "expect": [
+          {
+            "kind": "error"
+          }
+        ],
+        "expected_kind": "error",
+        "got": {
+          "kind": "error",
+          "text": "You already have a pet named 'Mochi'."
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.76
+      },
+      {
+        "id": "e02",
+        "text": "feed Rex tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          },
+          {
+            "kind": "error"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "Rex is not one of the owner's pets. Which pet would you like to feed?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.43
+      },
+      {
+        "id": "x01",
+        "text": "feed Mocha tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T07:00",
+            "duration": 10
+          },
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T07:00",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.16
+      }
+    ],
+    "loop on": [
+      {
+        "id": "t01",
+        "text": "starting tomorrow, walk Mochi every day at 8am for 30 minutes, high priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T08:00",
+            "duration": 30,
+            "priority": "high",
+            "frequency": "daily"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-16T08:00",
+          "duration": 30,
+          "priority": "high",
+          "frequency": "daily"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.12
+      },
+      {
+        "id": "t02",
+        "text": "feed Max tomorrow at 7:30am for 10 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-15T07:30",
+            "duration": 10
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-16T07:30",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.07
+      },
+      {
+        "id": "t03",
+        "text": "Mochi has a vet appointment on Friday at 2pm for 60 minutes, high priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-20T14:00",
+            "duration": 60,
+            "priority": "high"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-20T14:00",
+          "duration": 60,
+          "priority": "high",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.11
+      },
+      {
+        "id": "t04",
+        "text": "give Max his medicine every week on Monday at 6pm for 5 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-16T18:00",
+            "duration": 5,
+            "frequency": "weekly"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-16T18:00",
+          "duration": 5,
+          "priority": "medium",
+          "frequency": "weekly"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.05
+      },
+      {
+        "id": "t05",
+        "text": "groom Mochi on Wednesday at 10am for 45 minutes, low priority",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-18T10:00",
+            "duration": 45,
+            "priority": "low"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-17T10:00",
+          "duration": 45,
+          "priority": "low",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.14
+      },
+      {
+        "id": "t06",
+        "text": "play with Max tonight at 7pm for 20 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-14T19:00",
+            "duration": 20
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-19T19:00",
+          "duration": 20,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.11
+      },
+      {
+        "id": "t07",
+        "text": "uh walk mochi tomorrow at eight in the morning for like thirty minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T08:00",
+            "duration": 30
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-16T08:00",
+          "duration": 30,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.1
+      },
+      {
+        "id": "t08",
+        "text": "Max needs his nails trimmed Thursday at 4pm for 15 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Max",
+            "due": "2026-11-19T16:00",
+            "duration": 15
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Max",
+          "due": "2026-11-19T16:00",
+          "duration": 15,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.09
+      },
+      {
+        "id": "p01",
+        "text": "add a cat named Luna",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Luna",
+            "species": "cat"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "add_pet",
+          "name": "Luna",
+          "species": "cat"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.73
+      },
+      {
+        "id": "p02",
+        "text": "I got a new dog, his name is Biscuit",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Biscuit",
+            "species": "dog"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "question",
+          "text": "What is the new pet's name?"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.62
+      },
+      {
+        "id": "p03",
+        "text": "add a rabbit named Clover",
+        "expect": [
+          {
+            "kind": "add_pet",
+            "name": "Clover",
+            "species": "other"
+          }
+        ],
+        "expected_kind": "add_pet",
+        "got": {
+          "kind": "add_pet",
+          "name": "Clover",
+          "species": "other"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.74
+      },
+      {
+        "id": "p04",
+        "text": "add a pet named Pixel",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "add_pet",
+          "name": "Pixel",
+          "species": "other"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 3.68
+      },
+      {
+        "id": "r01",
+        "text": "remove Max",
+        "expect": [
+          {
+            "kind": "remove_pet",
+            "pet": "Max"
+          }
+        ],
+        "expected_kind": "remove_pet",
+        "got": {
+          "kind": "remove_pet",
+          "pet": "Max"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.72
+      },
+      {
+        "id": "r02",
+        "text": "delete Mochi from my pets",
+        "expect": [
+          {
+            "kind": "remove_pet",
+            "pet": "Mochi"
+          }
+        ],
+        "expected_kind": "remove_pet",
+        "got": {
+          "kind": "remove_pet",
+          "pet": "Mochi"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.78
+      },
+      {
+        "id": "r03",
+        "text": "remove my pet",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "Which pet should I remove?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.7
+      },
+      {
+        "id": "q01",
+        "text": "vet appointment tomorrow at 9",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "How long should it take, in minutes?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.11
+      },
+      {
+        "id": "q02",
+        "text": "walk Mochi for 30 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T09:00",
+          "duration": 30,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.09
+      },
+      {
+        "id": "q03",
+        "text": "feed tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T07:00",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": false,
+        "corrections": [],
+        "seconds": 4.14
+      },
+      {
+        "id": "e01",
+        "text": "add a dog named Mochi",
+        "expect": [
+          {
+            "kind": "error"
+          }
+        ],
+        "expected_kind": "error",
+        "got": {
+          "kind": "error",
+          "text": "You already have a pet named 'Mochi'."
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 3.7
+      },
+      {
+        "id": "e02",
+        "text": "feed Rex tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "question"
+          },
+          {
+            "kind": "error"
+          }
+        ],
+        "expected_kind": "question",
+        "got": {
+          "kind": "question",
+          "text": "Rex is not one of the owner's pets. Which pet would you like to feed?"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.47
+      },
+      {
+        "id": "x01",
+        "text": "feed Mocha tomorrow at 7am for 10 minutes",
+        "expect": [
+          {
+            "kind": "task",
+            "pet": "Mochi",
+            "due": "2026-11-15T07:00",
+            "duration": 10
+          },
+          {
+            "kind": "question"
+          }
+        ],
+        "expected_kind": "task",
+        "got": {
+          "kind": "task",
+          "pet": "Mochi",
+          "due": "2026-11-15T07:00",
+          "duration": 10,
+          "priority": "medium",
+          "frequency": "once"
+        },
+        "passed": true,
+        "corrections": [],
+        "seconds": 4.16
+      }
+    ]
+  }
+}

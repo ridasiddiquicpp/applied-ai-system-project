@@ -1,0 +1,51 @@
+flowchart TD
+    subgraph IN["1. INPUT"]
+        Mic["Voice (mic)"]
+        Typed["Typed text"]
+        Manual["Manual forms<br/>(no AI)"]
+    end
+
+    subgraph AI["2. AI (ai_parser.py)"]
+        STT["Whisper<br/>local speech-to-text"]
+        Model["Language model<br/>Qwen2.5-7B via Ollama (default)<br/>or Claude if a key is set"]
+        Check["Validation against<br/>your real pets and tasks"]
+    end
+
+    subgraph HUMAN["Human checks"]
+        H1{{"Edit transcript,<br/>click Parse"}}
+        H2{{"Answer a question<br/>if the AI asks"}}
+        H3{{"Preview, then<br/>Confirm or Cancel"}}
+    end
+
+    subgraph OUT["3. OUTPUT"]
+        Sched["Scheduler.add_task<br/>conflict check<br/>(tasks only)"]
+        Owner[("Owner, pets, tasks")]
+        UI["Task list, schedule,<br/>conflict warnings"]
+    end
+
+    subgraph TEST["Testing and evaluation"]
+        PT["pytest: 154 tests<br/>(fake models, no key)"]
+        EV["Eval script: 33 labeled sentences<br/>accuracy, wrong actions,<br/>loop on vs off"]
+    end
+
+    Mic --> STT --> H1
+    Typed --> H1
+    H1 --> Model
+    Model -->|"needs more info"| H2
+    H2 --> Model
+    Model -->|"task, add pet or remove pet"| Check
+    Check -->|"fails: error sent back<br/>(up to 3 tries)"| Model
+    Check -->|"passes"| H3
+    H3 -->|"Confirm: task"| Sched --> Owner
+    H3 -->|"Confirm: add or remove pet"| Owner
+    Manual --> Owner
+    Owner --> UI
+
+    PT -.->|"checks code"| Check
+    PT -.->|"checks code"| Sched
+    EV -.->|"measures the AI"| Model
+
+    classDef human fill:#e3f2fd,stroke:#1976d2,color:#000
+    classDef test fill:#e8f5e9,stroke:#388e3c,color:#000
+    class H1,H2,H3 human
+    class PT,EV test
